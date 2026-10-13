@@ -1,0 +1,52 @@
+name: cafateriaapp
+description: "App de Cafetería UTPN con Gestión de Saldo, WhatsApp y Almacenamiento en la Nube"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.10.7 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Iconos del sistema
+  cupertino_icons: ^1.0.8
+
+  # --- FIREBASE ---
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.13.5
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.9.4
+
+  # --- GESTIÓN DE IMÁGENES Y QR ---
+  image_picker: ^1.0.7
+  cached_network_image: ^3.3.1
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^5.1.0
+
+  # --- FUNCIONES EXTRA ---
+  url_launcher: ^6.2.5
+  audioplayers: ^5.2.1
+  vibration: ^2.0.1
+  intl: ^0.20.2
+  shared_preferences: ^2.2.2
+
+  # --- NOTIFICACIONES ---
+  flutter_local_notifications: ^17.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # --- ASSETS (IMÁGENES Y SONIDOS) ---
+  assets:
+    - assets/logo.png
+    - assets/avatar.png
+    - assets/sonido/

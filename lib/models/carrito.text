@@ -1,0 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class Carrito {
+  static List<Map<String, dynamic>> productos = [];
+
+  // 1. ACTUALIZADO: Ahora recibe 3 argumentos (nombre, precio, notas)
+  static void agregarProducto(String nombre, double precio, String notas) {
+    // Buscamos si ya existe el producto CON LA MISMA NOTA
+    int index = productos.indexWhere((p) =>
+    p['nombre'] == nombre && p['notas'] == notas
+    );
+
+    if (index != -1) {
+      productos[index]['cantidad']++;
+    } else {
+      productos.add({
+        "nombre": nombre,
+        "precio": precio,
+        "cantidad": 1,
+        "notas": notas // <--- Guardamos la instrucción aquí
+      });
+    }
+  }
+
+  static double obtenerTotal() => productos.fold(0, (sum, item) => sum + (item['precio'] * item['cantidad']));
+
+  static void limpiar() => productos.clear();
+
+  static Future<void> enviarPedido(String nombreAlumno) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || productos.isEmpty) return;
+
+    // Generamos un folio basado en el tiempo
+    String folio = 'UTPN-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+
+    await FirebaseFirestore.instance.collection('ordenes').add({
+      'userId': user.uid,
+      'nombreAlumno': nombreAlumno,
+      'folio': folio,
+      'productos': List.from(productos), // Aquí ya se van con las notas incluidas
+      'total': obtenerTotal(),
+      'estatus': 'En proceso',
+      'fecha_creacion': FieldValue.serverTimestamp(),
+    });
+
+    limpiar();
+  }
+}
